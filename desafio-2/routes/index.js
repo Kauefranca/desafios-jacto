@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const { join } = require('path');
 
 router.use('/api/cars', require('./api/cars/index'));
 
