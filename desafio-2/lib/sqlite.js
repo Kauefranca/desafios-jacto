@@ -2,10 +2,9 @@
 
 const sqlite3 = require('sqlite3').verbose();
 
-module.exports = class sqlite {
+module.exports = class Sqlite {
     constructor(config) {
         // Configurações globais do banco;
-        // this.config = config ? config : {};
         this.db = config?.db_path ?
             new sqlite3.Database(config.db_path) :
             new sqlite3.Database('./db/cars.db');
@@ -19,6 +18,7 @@ module.exports = class sqlite {
 
         this.db.run(`        
             CREATE TABLE IF NOT EXISTS car (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 model VARCHAR(40) NOT NULL,
                 year INTEGER NOT NULL,
                 manufacturer_id INT,
@@ -36,6 +36,12 @@ module.exports = class sqlite {
                     else resolve(rows);
                 });
             });
-        }
+        };
+
+        this.secureQuery = (query, params) => {
+            this.db
+                .prepare(query)
+                .run(params);
+        };
     };
 };

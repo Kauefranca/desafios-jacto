@@ -10,7 +10,7 @@ var parser = parse({ columns: true }, function (err, linhas) {
 
     for (let linha of linhas) {
         // Quantidade de linhas a serem importadas;
-        if (count >= 5) break;
+        if (count >= 50) break;
 
         // Verifica se a montadora do carro já está cadastrada e cria caso não exista;
         DB.query(`INSERT OR IGNORE INTO manufacturer
