@@ -15,15 +15,15 @@ var parser = parse({ columns: true }, function (err, linhas) {
         // Verifica se a montadora do carro já está cadastrada e cria caso não exista;
         DB.query(`INSERT OR IGNORE INTO manufacturer
             (name)
-            VALUES('${linha.Manufacturer}')
-        `);
+            VALUES(?)
+        `, [ linha.Manufacturer.toLowerCase() ]);
 
         // Insere o carro na tabela com base no CSV importado;
         DB.query(`INSERT INTO car
             (model, "year", manufacturer_id, mpg)
-            SELECT '${linha.model.trim()}', ${linha.year}, id, ${linha.mpg}
-            FROM manufacturer WHERE name = '${linha.Manufacturer}';
-        `);
+            SELECT ?, ?, id, ?
+            FROM manufacturer WHERE name = ?;
+        `, [ linha.model.trim(), linha.year, linha.mpg, linha.Manufacturer ]);
 
         count++;
     }

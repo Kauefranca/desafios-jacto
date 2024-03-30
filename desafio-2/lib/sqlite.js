@@ -29,19 +29,23 @@ module.exports = class Sqlite {
         );`)
 
         // Função para executar queries no banco;
-        this.query = (query) => {
+        this.query = async (query, params) => {
             return new Promise((resolve, reject) => {
-                this.db.all(query, (err, rows) => {
+                this.db.all(query, params, (err, rows) => {
                     if (err) reject(err);
                     else resolve(rows);
                 });
             });
         };
 
-        this.secureQuery = (query, params) => {
-            this.db
-                .prepare(query)
-                .run(params);
+        // Função que executa a query e retorna o ID do objeto inserido;
+        this.run = async (query, params) => {
+            return new Promise((resolve, reject) => {
+                this.db.run(query, params, function (err) {
+                    if (err) reject(err);
+                    else resolve(this.lastID);
+                });
+            });
         };
     };
 };
